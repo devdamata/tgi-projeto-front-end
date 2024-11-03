@@ -4,7 +4,7 @@ import Image from "next/image";
 import RegisterForm from "../components/register/RegisterForm";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-// import {toast} from "react-toastify";
+import {toast} from "react-toastify";
 
 const Register = () => {
     const router = useRouter();

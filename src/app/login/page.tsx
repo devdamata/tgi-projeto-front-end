@@ -10,7 +10,7 @@ const Login = () => {
   const router = useRouter();
 
   const handleLogin = async ({ email, password }: { email: string; password: string }) => {
-
+    console.log(email, password);
     try {
       const response = await axios.post(
           'http://localhost/api/login',

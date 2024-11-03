@@ -111,7 +111,7 @@ export default function RegisterForm({ onRegisterAction }: RegisterFormProps) {
                 </button>
 
                 <div className="w-full flex justify-center items-center mt-5">
-                    <a href="#" className="text-sm font-thin text-accent text-sky-400">Já possui uma conta?</a>
+                    <a href="/login" className="text-sm font-thin text-accent text-sky-400">Já possui uma conta?</a>
                 </div>
             </form>
 
