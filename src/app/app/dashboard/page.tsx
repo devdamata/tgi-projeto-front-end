@@ -1,9 +1,13 @@
 'use client';
 
 import React from 'react';
-import { BarChart2, Mail, MessageSquare, Settings, Users, Layout, CheckSquare } from 'lucide-react';
+import { BarChart2, Layers, MessageSquare, Settings, Users, Layout, CheckSquare, Sidebar } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from "next/image";
+import GraphicPie from "@/app/components/dashboard/GraphicPie";
+import SideBarMenu from './components/sideBarMenu';
+import SideBar from './components/sideBar';
+import Header from './components/header';
 
 // Importação dinâmica do Recharts
 const LineChart = dynamic(
@@ -11,17 +15,21 @@ const LineChart = dynamic(
     { ssr: false }
 );
 
+
 const Line = dynamic(
+    // @ts-ignore
     () => import('recharts').then((mod) => mod.Line),
     { ssr: false }
 );
 
 const XAxis = dynamic(
+    // @ts-ignore
     () => import('recharts').then((mod) => mod.XAxis),
     { ssr: false }
 );
 
 const YAxis = dynamic(
+    // @ts-ignore
     () => import('recharts').then((mod) => mod.YAxis),
     { ssr: false }
 );
@@ -32,6 +40,7 @@ const CartesianGrid = dynamic(
 );
 
 const Tooltip = dynamic(
+    // @ts-ignore
     () => import('recharts').then((mod) => mod.Tooltip),
     { ssr: false }
 );
@@ -52,64 +61,42 @@ const tasks = [
 ];
 
 // Componente SidebarLink separado com tipagem correta
-interface SidebarLinkProps {
-    icon: React.ReactNode;
-    text: string;
-    active?: boolean;
-}
+// interface SidebarLinkProps {
+//     icon: React.ReactNode;
+//     text: string;
+//     active?: boolean;
+//     link: string;
+// }
 
-const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false }) => (
-    <div className={`flex items-center space-x-2 px-4 py-3 rounded-lg cursor-pointer
-    ${active ? 'bg-blue-50 text-blue-500' : 'text-gray-600 hover:bg-gray-50'}`}>
-        {icon}
-        <span>{text}</span>
-    </div>
-);
+// const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false, link }) => (
+//     <div className={`flex items-center space-x-2 px-4 py-3 rounded-lg cursor-pointer
+//         ${active ? 'bg-blue-50 text-blue-500' : 'text-gray-600 hover:bg-gray-50'}`} >
+//         <a href={link} className="flex items-center space-x-2 w-full" >
+//             {icon}
+//             <span>{text}</span>
+//         </a>
+//     </div>
+// );
 
 export default function Dashboard() {
     return (
         <div className="flex h-screen bg-gray-100">
-            {/* Sidebar */}
-            <div className="w-64 bg-white shadow-lg">
-                <div className="p-4">
-                    <div className="flex items-center space-x-4 mb-8">
-                        <Image src="/avatar/avatar.png" alt="Profile" width={40} height={40} className="rounded-full" />
-                        <div>
-                            <h3 className="font-medium">Sierra Ferguson</h3>
-                            <p className="text-sm text-gray-500">s.ferguson@gmail.com</p>
-                        </div>
-                    </div>
-                    <nav>
-                        <SidebarLink icon={<Layout />} text="Dashboard" active />
-                        <SidebarLink icon={<CheckSquare />} text="Tasks" />
-                        <SidebarLink icon={<Mail />} text="Email" />
-                        <SidebarLink icon={<Users />} text="Contacts" />
-                        <SidebarLink icon={<MessageSquare />} text="Chat" />
-                        <SidebarLink icon={<BarChart2 />} text="Deals" />
-                        <SidebarLink icon={<Settings />} text="Settings" />
-                    </nav>
-                </div>
-            </div>
-
-            {/* Main Content */}
+            <SideBar />
             <div className="flex-1 overflow-auto">
-                {/* Header */}
-                <div className="bg-white p-4 shadow-sm">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="flex items-center">
-                            <div className="w-full max-w-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
-                            {/*<input*/}
-                            {/*    type="text"*/}
-                            {/*    placeholder="Global search"*/}
-                            {/*    className="w-full max-w-lg px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"*/}
-                            {/*/>*/}
-                        </div>
-                    </div>
-                </div>
-
+                <Header />
                 {/* Content */}
                 <div className="p-6">
                     <div className="max-w-7xl mx-auto">
+                        {/* Deals Graph */}
+                        <div className="bg-white rounded-lg p-4 shadow-sm mb-6">
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-xl font-semibold">Status de tarefas</h2>
+                                <select className="border rounded px-2 py-1">
+                                    <option>Mensal</option>
+                                </select>
+                            </div>
+                            <GraphicPie />
+                        </div>
                         {/* Progress Bar */}
                         <div className="bg-white rounded-lg p-4 mb-6 shadow-sm">
                             <div className="flex justify-between items-center mb-4">
@@ -160,7 +147,7 @@ export default function Dashboard() {
                                             </div>
                                             <div className="mt-2 flex items-center">
                                                 <Image
-                                                    src="/api/placeholder/24/24"
+                                                    src="https://via.assets.so/game.png?id=1&q=24&w=24&h=24&fit=fill"
                                                     alt={task.assignee}
                                                     width={24}
                                                     height={24}
@@ -181,13 +168,14 @@ export default function Dashboard() {
                                         <option>Monthly</option>
                                     </select>
                                 </div>
-                                <div style={{ width: '100%', height: '250px' }}>
+                                <div style={{width: '100%', height: '250px'}}>
                                     <LineChart width={300} height={200} data={mockData}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="name" />
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Line type="monotone" dataKey="value" stroke="#2196F3" strokeWidth={2} dot={false} />
+                                        <CartesianGrid strokeDasharray="3 3"/>
+                                        <XAxis dataKey="name"/>
+                                        <YAxis/>
+                                        <Tooltip/>
+                                        <Line type="monotone" dataKey="value" stroke="#2196F3" strokeWidth={2}
+                                              dot={false}/>
                                     </LineChart>
                                 </div>
                             </div>

@@ -7,7 +7,7 @@ export async function middleware(request: NextRequest) {
     const cookie = await cookies()
     const token = cookie.get(TOKEN_KEY);
 
-    const protectedRoutes = ['/dashboard'];
+    const protectedRoutes = ['/app'];
 
     const isProtectedRoute = protectedRoutes.includes(request.nextUrl.pathname);
 
@@ -19,5 +19,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/dashboard/:path*']
+    matcher: ['/app/:path*']
 }

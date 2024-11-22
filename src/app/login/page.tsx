@@ -10,7 +10,6 @@ const Login = () => {
   const router = useRouter();
 
   const handleLogin = async ({ email, password }: { email: string; password: string }) => {
-    console.log(email, password);
     try {
       const response = await axios.post(
           'http://localhost/api/login',
@@ -22,10 +21,12 @@ const Login = () => {
         router.push('/dashboard');
         toast.success('Login efetuado com sucesso!');
       } else {
-        console.error('Erro na autenticação:', response.statusText);
+        toast.error('Erro na autenticação, tente novamente!');
       }
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message);
+      }
     }
   };
   
