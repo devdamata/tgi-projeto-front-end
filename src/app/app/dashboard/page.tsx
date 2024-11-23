@@ -5,43 +5,38 @@ import { BarChart2, Layers, MessageSquare, Settings, Users, Layout, CheckSquare,
 import dynamic from 'next/dynamic';
 import Image from "next/image";
 import GraphicPie from "@/app/components/dashboard/GraphicPie";
-import SideBarMenu from './components/sideBarMenu';
 import SideBar from './components/sideBar';
 import Header from './components/header';
+import { useTheme } from '@/app/hooks/useTheme';
 
 // Importação dinâmica do Recharts
 const LineChart = dynamic(
-    () => import('recharts').then((mod) => mod.LineChart),
+    () => import('recharts').then((mod) => mod.LineChart), 
     { ssr: false }
 );
-
-
 const Line = dynamic(
-    // @ts-ignore
-    () => import('recharts').then((mod) => mod.Line),
+    //@ts-ignore
+    () => import('recharts').then((mod) => mod.Line), 
     { ssr: false }
 );
-
 const XAxis = dynamic(
-    // @ts-ignore
-    () => import('recharts').then((mod) => mod.XAxis),
+    //@ts-ignore
+    () => import('recharts').then((mod) => mod.XAxis), 
     { ssr: false }
 );
-
 const YAxis = dynamic(
-    // @ts-ignore
-    () => import('recharts').then((mod) => mod.YAxis),
+    //@ts-ignore
+    () => import('recharts').then((mod) => mod.YAxis), 
     { ssr: false }
 );
-
 const CartesianGrid = dynamic(
-    () => import('recharts').then((mod) => mod.CartesianGrid),
+    //@ts-ignore
+    () => import('recharts').then((mod) => mod.CartesianGrid), 
     { ssr: false }
 );
-
 const Tooltip = dynamic(
-    // @ts-ignore
-    () => import('recharts').then((mod) => mod.Tooltip),
+    //@ts-ignore
+    () => import('recharts').then((mod) => mod.Tooltip), 
     { ssr: false }
 );
 
@@ -60,27 +55,11 @@ const tasks = [
     { title: 'Office meet-up', dueDate: 'December 23, 2018', type: 'Event', status: 'completed', assignee: 'Lindsey Stroud' }
 ];
 
-// Componente SidebarLink separado com tipagem correta
-// interface SidebarLinkProps {
-//     icon: React.ReactNode;
-//     text: string;
-//     active?: boolean;
-//     link: string;
-// }
-
-// const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false, link }) => (
-//     <div className={`flex items-center space-x-2 px-4 py-3 rounded-lg cursor-pointer
-//         ${active ? 'bg-blue-50 text-blue-500' : 'text-gray-600 hover:bg-gray-50'}`} >
-//         <a href={link} className="flex items-center space-x-2 w-full" >
-//             {icon}
-//             <span>{text}</span>
-//         </a>
-//     </div>
-// );
-
 export default function Dashboard() {
+    const { theme, toggleTheme } = useTheme();
+
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className={`flex h-screen bg-gray-100 dark:bg-gray-900`}>
             <SideBar />
             <div className="flex-1 overflow-auto">
                 <Header />
@@ -88,41 +67,41 @@ export default function Dashboard() {
                 <div className="p-6">
                     <div className="max-w-7xl mx-auto">
                         {/* Deals Graph */}
-                        <div className="bg-white rounded-lg p-4 shadow-sm mb-6">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm mb-6">
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-xl font-semibold">Status de tarefas</h2>
-                                <select className="border rounded px-2 py-1">
+                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Status de tarefas</h2>
+                                <select className="border rounded px-2 py-1  text-gray-900 dark:bg-gray-700 dark:text-white">
                                     <option>Mensal</option>
                                 </select>
                             </div>
                             <GraphicPie />
                         </div>
                         {/* Progress Bar */}
-                        <div className="bg-white rounded-lg p-4 mb-6 shadow-sm">
-                            <div className="flex justify-between items-center mb-4">
+                        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-6 shadow-sm">
+                            <div className="flex justify-between items-center mb-4 text-gray-900 dark:text-gray-300">
                                 <span>8 task completed out of 10</span>
                                 <div className="flex items-center">
                                     <span className="mr-2">Show:</span>
-                                    <select className="border rounded px-2 py-1">
+                                    <select className="border rounded px-2 py-1 text-gray-900 dark:bg-gray-700 dark:text-white">
                                         <option>This week</option>
                                     </select>
                                 </div>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                 <div className="bg-green-500 h-2 rounded-full w-4/5"></div>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-3 gap-6">
                             {/* Calendar */}
-                            <div className="col-span-2 bg-white rounded-lg p-4 shadow-sm">
-                                <h2 className="text-xl font-semibold mb-4">23 December, Sunday</h2>
+                            <div className="col-span-2 bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
+                                <h2 className="text-xl font-semibold mb-4  text-gray-900 dark:text-white">23 December, Sunday</h2>
                                 <div className="grid grid-cols-7 gap-4">
                                     {weekDays.map((day, i) => (
                                         <div key={day} className="text-center">
-                                            <div className="text-gray-500 mb-2">{day}</div>
+                                            <div className="text-gray-500 dark:text-gray-400 mb-2">{day}</div>
                                             <div className={`rounded-full w-8 h-8 mx-auto flex items-center justify-center
-                                                ${i === 0 ? 'bg-blue-500 text-white' : ''}`}>
+                                                ${i === 0 ? 'bg-blue-500 dark:bg-blue-600 text-white' : ''}`}>
                                                 {23 + i}
                                             </div>
                                         </div>
@@ -132,15 +111,15 @@ export default function Dashboard() {
                                 {/* Tasks List */}
                                 <div className="mt-8">
                                     {tasks.map((task, i) => (
-                                        <div key={i} className="border-t py-4">
+                                        <div key={i} className="border-t border-gray-300 dark:border-gray-600 py-4">
                                             <div className="flex justify-between items-center">
                                                 <div>
-                                                    <h3 className="font-medium">{task.title}</h3>
-                                                    <p className="text-sm text-gray-500">Due date: {task.dueDate}</p>
+                                                    <h3 className="font-medium text-gray-900 dark:text-white">{task.title}</h3>
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">Due date: {task.dueDate}</p>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
                                                     <span className={`px-3 py-1 rounded-full text-sm
-                                                        ${task.status === 'completed' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                                                        ${task.status === 'completed' ? 'bg-green-100 dark:bg-green-700 text-green-600 dark:text-green-100' : 'bg-red-100 dark:bg-red-700 text-red-600 dark:text-red-100'}`}>
                                                         {task.status}
                                                     </span>
                                                 </div>
@@ -153,7 +132,7 @@ export default function Dashboard() {
                                                     height={24}
                                                     className="rounded-full mr-2"
                                                 />
-                                                <span className="text-sm text-gray-600">{task.assignee}</span>
+                                                <span className="text-sm text-gray-600 dark:text-gray-400">{task.assignee}</span>
                                             </div>
                                         </div>
                                     ))}
@@ -161,21 +140,20 @@ export default function Dashboard() {
                             </div>
 
                             {/* Deals Graph */}
-                            <div className="bg-white rounded-lg p-4 shadow-sm">
+                            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
                                 <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-xl font-semibold">Deals</h2>
-                                    <select className="border rounded px-2 py-1">
+                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Deals</h2>
+                                    <select className="border rounded px-2 py-1 text-gray-900 dark:bg-gray-700 dark:text-white">
                                         <option>Monthly</option>
                                     </select>
                                 </div>
-                                <div style={{width: '100%', height: '250px'}}>
+                                <div style={{ width: '100%', height: '250px' }}>
                                     <LineChart width={300} height={200} data={mockData}>
-                                        <CartesianGrid strokeDasharray="3 3"/>
-                                        <XAxis dataKey="name"/>
-                                        <YAxis/>
-                                        <Tooltip/>
-                                        <Line type="monotone" dataKey="value" stroke="#2196F3" strokeWidth={2}
-                                              dot={false}/>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Line type="monotone" dataKey="value" stroke="#2196F3" strokeWidth={2} dot={false} />
                                     </LineChart>
                                 </div>
                             </div>

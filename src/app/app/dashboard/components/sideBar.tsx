@@ -3,19 +3,23 @@ import SideBarMenu from './sideBarMenu';
 
 export default function SideBar() {
   return (
-    <>
-      <div className="w-64 bg-white shadow-lg">
-          <div className="p-4">
-              <div className="flex items-center space-x-4 mb-8">
-                  <Image src="/avatar/avatar.png" alt="Profile" width={40} height={40} className="rounded-full" />
-                  <div>
-                      <h3 className="font-medium">Sierra Ferguson</h3>
-                      <p className="text-sm text-gray-500">s.ferguson@gmail.com</p>
-                  </div>
-              </div>
-              <SideBarMenu />
+    <aside className="w-64 bg-white dark:bg-gray-800 shadow-lg">
+      <div className="p-4">
+        <div className="flex items-center space-x-4 mb-8">
+          <Image 
+            src="/avatar/avatar.png" 
+            alt="Profile" 
+            width={40} 
+            height={40} 
+            className="rounded-full border-2 border-gray-300 dark:border-gray-700" 
+          />
+          <div>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100">Sierra Ferguson</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400">s.ferguson@gmail.com</p>
           </div>
+        </div>
+        <SideBarMenu />
       </div>
-    </>
+    </aside>
   );
 }
