@@ -21,7 +21,7 @@ const Register = () => {
             );
 
             if (response.status === 200) {
-                router.push('/dashboard');
+                router.push('/app/dashboard');
                 toast.success('Usuário criado com sucesso!');
 
             } else {

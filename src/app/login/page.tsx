@@ -18,7 +18,7 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        router.push('/dashboard');
+        router.push('/app/dashboard');
         toast.success('Login efetuado com sucesso!');
       } else {
         toast.error('Erro na autenticação, tente novamente!');
