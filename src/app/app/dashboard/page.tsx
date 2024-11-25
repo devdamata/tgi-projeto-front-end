@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { BarChart2, Layers, MessageSquare, Settings, Users, Layout, CheckSquare, Sidebar } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from "next/image";
 import GraphicPie from "@/app/components/dashboard/GraphicPie";
