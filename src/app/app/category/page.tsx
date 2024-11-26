@@ -1,12 +1,16 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { useTheme } from "@/app/hooks/useTheme";
 import Header from "../dashboard/components/header";
 import SideBar from "../dashboard/components/sideBar";
 import { toast } from 'react-toastify';
+import { Box, Grid, Card, Typography, Button, Modal, TextField } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+
 
 export default function CategoryPage() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState("");
@@ -19,12 +23,13 @@ export default function CategoryPage() {
       try {
         const response = await fetch('http://localhost/api/category/list');
         if (!response.ok) {
-          toast.error("Erro ao carregar categorias.");
+          throw new Error("Erro ao carregar categorias.");
         }
         const data = await response.json();
         setCategories(data.categories.length !== 0 ? data.categories : []);
       } catch (error) {
         setError(error.message);
+        toast.error(error.message);
       }
     };
 
@@ -52,100 +57,140 @@ export default function CategoryPage() {
         setCategories((prev) => [...prev, createdCategory.category]);
         setNewCategory("");
         setIsModalOpen(false);
+        toast.success("Categoria criada com sucesso!");
       } catch (error) {
         setError(error.message);
+        toast.error(error.message);
       } finally {
         setIsLoading(false);
       }
     }
   };
 
+  // Columns for DataGrid
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 150 },
+    { field: 'name', headerName: 'Nome', flex: 1 },
+  ];
+
   return (
     <div className={`flex h-screen bg-gray-100 dark:bg-gray-900`}>
       <SideBar />
       <div className="flex-1 overflow-auto">
         <Header />
-        <div className="p-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h1 className="text-xl font-bold text-gray-800 dark:text-gray-100">
-                Categorias
-              </h1>
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        <Box p={3}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Card 
+                sx={{
+                  padding: 2,
+                  backgroundColor: theme === 'dark' ? '#263238' : '#fff',
+                  borderColor: theme === 'dark' ? '#37474f' : '#e0e0e0',
+                  color: theme === 'dark' ? '#fff' : '#333'
+                }}
               >
-                Nova Categoria
-              </button>
-            </div>
-            {error && (
-              <div className="mb-4 text-red-500">
-                Erro: {error}
-              </div>
-            )}
-            <table className="w-full border-collapse border border-gray-200 dark:border-gray-700">
-              <thead>
-                <tr className="bg-gray-100 dark:bg-gray-800">
-                  <th className="border border-gray-200 dark:border-gray-700 px-4 py-2 text-left">
-                    ID
-                  </th>
-                  <th className="border border-gray-200 dark:border-gray-700 px-4 py-2 text-left">
-                    Nome
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.length !== 0 ? categories.map((category) => (
-                  <tr
-                    key={category.id}
-                    className="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-800 dark:even:bg-gray-900"
+                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}
+                  sx={{
+                    backgroundColor: theme === 'dark' ? '#263238' : '#fff',
+                    borderColor: theme === 'dark' ? '#37474f' : '#e0e0e0',
+                  }}
+                >
+                  <Typography variant="h5" component="h1">
+                    Categorias
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => setIsModalOpen(true)}
+                    sx={{
+                      backgroundColor: theme === 'dark' ? '#5c6bc0' : '#1a237e'
+                    }}
                   >
-                    <td className="border border-gray-200 dark:border-gray-700 px-4 py-2">
-                      {category.id}
-                    </td>
-                    <td className="border border-gray-200 dark:border-gray-700 px-4 py-2">
-                      {category.name}
-                    </td>
-                  </tr>
-                )) : <tr><td><h3>Sem dados</h3></td></tr>}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-1/3">
-            <h2 className="text-lg font-bold mb-4 text-gray-800 dark:text-gray-100">
+                    Nova Categoria
+                  </Button>
+                </Box>
+                {error && (
+                  <Typography variant="body2" color="error">
+                    {error}
+                  </Typography>
+                )}
+                <Box sx={{ 
+                      height: 400, 
+                      mt: 2,
+                      backgroundColor: theme === 'dark' ? '#263238' : '#fff',
+                      borderColor: theme === 'dark' ? '#000' : '#e0e0e0',
+                      color: theme === 'dark' ? '#fff' : '#333'  
+                  }}>
+                  <DataGrid
+                    rows={categories}
+                    columns={columns}
+                    pageSize={5}
+                    rowsPerPageOptions={[5, 10]}
+                    disableSelectionOnClick
+                    sx={{
+                      backgroundColor: theme === 'dark' ? '#263238' : '#fff',
+                      background: theme === 'dark' ? '#263238' : '#fff',
+                      borderColor: theme === 'dark' ? '#000' : '#e0e0e0',
+                      color: theme === 'dark' ? '#fff' : '#333'
+                    }}
+                  />
+                </Box>
+              </Card>
+            </Grid>
+          </Grid>
+        </Box>
+        {/* Modal */}
+        <Modal
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              bgcolor: theme === 'dark' ? '#263238' : '#fff',
+              boxShadow: 24,
+              borderRadius: 2,
+              p: 4,
+              width: 400,
+            }}
+          >
+            <Typography id="modal-title" variant="h6" mb={2}>
               Nova Categoria
-            </h2>
-            <input
-              type="text"
+            </Typography>
+            <TextField
+              fullWidth
+              label="Nome da categoria"
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
-              placeholder="Nome da categoria"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              variant="outlined"
+              margin="dense"
             />
-            <div className="mt-4 flex justify-end">
-              <button
+            <Box display="flex" justifyContent="flex-end" mt={2}>
+              <Button
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 mr-2"
+                variant="outlined"
+                color="secondary"
+                sx={{ mr: 1 }}
               >
                 Cancelar
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleAddCategory}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                variant="contained"
+                color="primary"
                 disabled={isLoading}
               >
                 {isLoading ? "Salvando..." : "Adicionar"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+      </div>
     </div>
   );
 }

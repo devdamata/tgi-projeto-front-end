@@ -39,7 +39,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false, l
 export default function SideBarMenu() {
     return (
         <nav
-            className="h-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 flex flex-col justify-between"
+            className="h-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 flex flex-col justify-between"
         >
             <div>
                 <SidebarLink icon={<Layout />} text="Dashboard" active link="/app/dashboard" />
