@@ -14,7 +14,7 @@ interface SidebarLinkProps {
 
 const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false, link }) => {
     const { theme } = useTheme(); // Obtém o tema atual do hook
-    console.log(theme);
+
     return (
         <div
             className={`flex items-center space-x-2 px-4 py-3 rounded-lg cursor-pointer transition-colors

@@ -28,8 +28,7 @@ export default function CategoryPage() {
         const data = await response.json();
         setCategories(data.categories.length !== 0 ? data.categories : []);
       } catch (error) {
-        setError(error.message);
-        toast.error(error.message);
+        throw error
       }
     };
 
@@ -54,13 +53,13 @@ export default function CategoryPage() {
         }
 
         const createdCategory = await response.json();
+        //@ts-ignore
         setCategories((prev) => [...prev, createdCategory.category]);
         setNewCategory("");
         setIsModalOpen(false);
         toast.success("Categoria criada com sucesso!");
       } catch (error) {
-        setError(error.message);
-        toast.error(error.message);
+        throw error;
       } finally {
         setIsLoading(false);
       }
@@ -127,9 +126,6 @@ export default function CategoryPage() {
                     <DataGrid
                       rows={categories}
                       columns={columns}
-                      pageSize={5}
-                      rowsPerPageOptions={[5, 10]}
-                      disableSelectionOnClick
                       sx={{
                         backgroundColor: theme === 'dark' ? '#263238' : '#fff',
                         color: theme === 'dark' ? '#fff' : '#333',

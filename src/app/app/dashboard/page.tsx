@@ -1,12 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from "next/image";
 import GraphicPie from "@/app/components/dashboard/GraphicPie";
 import SideBar from './components/sideBar';
 import Header from './components/header';
-import { useTheme } from '@/app/hooks/useTheme';
 import Calendar from './components/calendar';
 
 // Importação dinâmica do Recharts
@@ -56,7 +55,6 @@ const tasks = [
 ];
 
 export default function Dashboard() {
-    const { theme, toggleTheme } = useTheme();
 
     return (
         <div className={`flex h-screen bg-gray-100 dark:bg-gray-900`}>

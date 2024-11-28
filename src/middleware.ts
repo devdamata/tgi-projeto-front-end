@@ -6,7 +6,7 @@ export const TOKEN_KEY = 'authToken';
 export async function middleware(request: NextRequest) {
     const cookie = await cookies()
     const token = cookie.get(TOKEN_KEY);
-
+    
     const protectedRoutes = ['/app', '/app/dashboard', '/app/category'];
 
     const isProtectedRoute = protectedRoutes.includes(request.nextUrl.pathname);
