@@ -38,26 +38,26 @@ const Login = () => {
           focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
           disabled:opacity-50 disabled:pointer-events-none ring-offset-background 
           hover:bg-accent hover:text-accent-foreground h-10 py-2 px-4 absolute 
-          left-4 top-4 md:left-8 md:top-8" href="#">
+          left-4 top-4 md:left-8 md:top-8 dark:text-white text-gray-900" href="#">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
             viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" 
             strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-chevron-left 
-            mr-2 h-4 w-4">
+            mr-2 h-4 w-4 dark:text-white text-gray-900">
               <path d="m15 18-6-6 6-6"></path>
             </svg>
               Back
         </a>
-        <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] border-2 rounded-md border-white shadow-2xl p-5">
-          <div className="flex flex-col space-y-2 text-center">
+        <div className="text-white dark:text-gray-900 mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px] border-2 rounded-md border-white shadow-2xl p-5">
+          <div className="flex flex-col space-y-2 text-center text-white dark:text-gray-900">
             <Image 
-              className="mx-auto dark:invert"  
+              className="mx-auto dark:text-white text-gray-900"  
               src="/logo.svg" 
               alt="" 
               width={64} 
               height={64}
             />
-            <h1 className="text-2xl font-semibold tracking-tight">Bem-vindo de volta</h1>
-            <p className="text-sm text-muted-foreground">Digite seu email e senha para entrar</p>
+            <h1 className="text-2xl font-semibold tracking-tight dark:text-white text-gray-900">Bem-vindo de volta</h1>
+            <p className="text-sm text-muted-foreground dark:text-white text-gray-900">Digite seu email e senha para entrar</p>
           </div>
           <div className="grid gap-6">
             <LoginForm onLoginAction={handleLogin} />

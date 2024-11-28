@@ -42,11 +42,11 @@ const GraphicPie: React.FC = () => {
                     type: 'pie',
                     radius: '50%',
                     data: [
-                        { value: 1048, name: 'Search Engine' },
-                        { value: 735, name: 'Direct' },
-                        { value: 580, name: 'Email' },
-                        { value: 484, name: 'Union Ads' },
-                        { value: 300, name: 'Video Ads' }
+                        { value: 1048, name: 'Trabalho' },
+                        { value: 735, name: 'Estudo Lógica' },
+                        { value: 580, name: 'Lazer' },
+                        { value: 484, name: 'Tarefas Domestícas' },
+                        { value: 300, name: 'Inglês' }
                     ],
                     emphasis: {
                         itemStyle: {

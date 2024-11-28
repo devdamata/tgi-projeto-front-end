@@ -45,10 +45,10 @@ export default function SideBarMenu() {
                 <SidebarLink icon={<Layout />} text="Dashboard" active link="/app/dashboard" />
                 <SidebarLink icon={<CheckSquare />} text="Tarefas" link="/app/tasks" />
                 <SidebarLink icon={<Layers />} text="Categorias" link="/app/category" />
-                <SidebarLink icon={<Users />} text="Contacts" link="/app/dashboard" />
+                {/* <SidebarLink icon={<Users />} text="Contacts" link="/app/dashboard" />
                 <SidebarLink icon={<MessageSquare />} text="Chat" link="/app/dashboard" />
-                <SidebarLink icon={<BarChart2 />} text="Deals" link="/app/dashboard" />
-                <SidebarLink icon={<Settings />} text="Settings" link="/app/dashboard" />
+                <SidebarLink icon={<BarChart2 />} text="Deals" link="/app/dashboard" /> */}
+                <SidebarLink icon={<Settings />} text="Configurações" link="/app/dashboard" />
             </div>
             <div className="p-4">
                 <DarkModeToggle />

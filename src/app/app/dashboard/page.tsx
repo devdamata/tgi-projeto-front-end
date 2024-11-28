@@ -7,6 +7,7 @@ import GraphicPie from "@/app/components/dashboard/GraphicPie";
 import SideBar from './components/sideBar';
 import Header from './components/header';
 import { useTheme } from '@/app/hooks/useTheme';
+import Calendar from './components/calendar';
 
 // Importação dinâmica do Recharts
 const LineChart = dynamic(
@@ -68,7 +69,7 @@ export default function Dashboard() {
                         {/* Deals Graph */}
                         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm mb-6">
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Status de tarefas</h2>
+                                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Categorias</h2>
                                 <select className="border rounded px-2 py-1  text-gray-900 dark:bg-gray-700 dark:text-white">
                                     <option>Mensal</option>
                                 </select>
@@ -78,11 +79,11 @@ export default function Dashboard() {
                         {/* Progress Bar */}
                         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-6 shadow-sm">
                             <div className="flex justify-between items-center mb-4 text-gray-900 dark:text-gray-300">
-                                <span>8 task completed out of 10</span>
+                                <span>8 Tarefas completadas de 20</span>
                                 <div className="flex items-center">
-                                    <span className="mr-2">Show:</span>
+                                    <span className="mr-2">Filtro:</span>
                                     <select className="border rounded px-2 py-1 text-gray-900 dark:bg-gray-700 dark:text-white">
-                                        <option>This week</option>
+                                        <option>Mensal</option>
                                     </select>
                                 </div>
                             </div>
@@ -93,19 +94,9 @@ export default function Dashboard() {
 
                         <div className="grid grid-cols-3 gap-6">
                             {/* Calendar */}
+                            {/* <Calendar /> */}
                             <div className="col-span-2 bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
-                                <h2 className="text-xl font-semibold mb-4  text-gray-900 dark:text-white">23 December, Sunday</h2>
-                                <div className="grid grid-cols-7 gap-4">
-                                    {weekDays.map((day, i) => (
-                                        <div key={day} className="text-center">
-                                            <div className="text-gray-500 dark:text-gray-400 mb-2">{day}</div>
-                                            <div className={`rounded-full w-8 h-8 mx-auto flex items-center justify-center
-                                                ${i === 0 ? 'bg-blue-500 dark:bg-blue-600 text-white' : ''}`}>
-                                                {23 + i}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                <Calendar />
 
                                 {/* Tasks List */}
                                 <div className="mt-8">
@@ -113,8 +104,8 @@ export default function Dashboard() {
                                         <div key={i} className="border-t border-gray-300 dark:border-gray-600 py-4">
                                             <div className="flex justify-between items-center">
                                                 <div>
-                                                    <h3 className="font-medium text-gray-900 dark:text-white">{task.title}</h3>
-                                                    <p className="text-sm text-gray-500 dark:text-gray-400">Due date: {task.dueDate}</p>
+                                                    <h3 className="font-medium text-gray-900 dark:text-white">Estudo da Língua Inglesa</h3>
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">Data: 27 de Novembro de 2024</p>
                                                 </div>
                                                 <div className="flex items-center space-x-2">
                                                     <span className={`px-3 py-1 rounded-full text-sm
@@ -141,10 +132,10 @@ export default function Dashboard() {
                             {/* Deals Graph */}
                             <div className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm">
                                 <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Deals</h2>
+                                    {/* <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Deals</h2>
                                     <select className="border rounded px-2 py-1 text-gray-900 dark:bg-gray-700 dark:text-white">
                                         <option>Monthly</option>
-                                    </select>
+                                    </select> */}
                                 </div>
                                 <div style={{ width: '100%', height: '250px' }}>
                                     <LineChart width={300} height={200} data={mockData}>
