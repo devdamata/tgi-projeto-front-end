@@ -7,6 +7,7 @@ import SideBar from "../dashboard/components/sideBar";
 import { toast } from 'react-toastify';
 import { Box, Grid, Card, Typography, Button, Modal, TextField } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import useApi from '@/app/components/useApi/UseApi'
 
 export default function CategoryPage() {
   const { theme } = useTheme();
@@ -20,15 +21,19 @@ export default function CategoryPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost/api/category/list');
-        console.log(response)
-        if (!response.ok) {
+
+        const response = await useApi.get('/category/list'); // O Axios adicionará o token automaticamente no header
+        
+    
+        if (response.status !== 200) {
           throw new Error("Erro ao carregar categorias.");
         }
-        const data = await response.json();
+    
+        const data = response.data;
         setCategories(data.categories.length !== 0 ? data.categories : []);
       } catch (error) {
-        throw error
+        console.error(error);
+        throw error;
       }
     };
 

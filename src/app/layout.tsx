@@ -1,4 +1,5 @@
-import type { Metadata } from 'next';
+'use client';
+
 import './globals.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,33 +7,34 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { cookies } from 'next/headers';
 import { UserProvider } from './UserContext';
-
-export const metadata: Metadata = {
-  title: 'Gerenciador de Tarefas com Organização por Categorias e Prioridades',
-  description: '',
-};
-
+import { usePathname } from 'next/navigation';
+import { checkIsPublicRoute } from '@/functions/check-is-public-route';
+import PrivateRoute from '@/components/PrivateRoute';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   // Acessando os cookies no lado do servidor
-  const cookie = cookies();
-  const userInfo = cookie.get('userInfo');
+  // const cookie = cookies();
+  // const userInfo = cookie.get('userInfo');
 
-  let user = null;
-  if (userInfo) {
-    try {
-      user = JSON.parse(decodeURIComponent(userInfo.value)); // Convertendo o cookie para objeto
-    } catch (error) {
-      console.error('Erro ao analisar o cookie:', error);
-    }
-  }
+  const user = {id: 1, name: 'Anderson TESTE12310', email: 'teste@teste.com'}
+    
+
+  //verificação se o usuário está logado.
+
+  const pathName = usePathname();
+
+  const isPublicPage = checkIsPublicRoute(pathName)
 
   return (
     <UserProvider initialUser={user}>
       <html lang="pt-BR">
-        <body>{children}</body>
+        <body>
+          {isPublicPage && children}
+          {!isPublicPage && (
+            <PrivateRoute>{children}</PrivateRoute>
+          )}          
+        </body>
       </html>
     </UserProvider>
   );

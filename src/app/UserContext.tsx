@@ -4,9 +4,10 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
 interface User {
+  id: number;
   name: string;
   email: string;
-  id: string;
+  
 }
 
 interface UserContextType {

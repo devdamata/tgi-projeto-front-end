@@ -5,8 +5,6 @@ import { useUser } from "@/app/UserContext";
 export default function Header() {
   const { user } = useUser();
 
-  console.log('teste: ', user)
-
   return (
     <header className="bg-white dark:bg-gray-800 p-4 shadow-sm">
       <div className="max-w-7xl mx-auto">
