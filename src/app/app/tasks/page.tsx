@@ -5,74 +5,72 @@ import { useTheme } from "@/app/hooks/useTheme";
 import Header from "../dashboard/components/header";
 import SideBar from "../dashboard/components/sideBar";
 import { toast } from 'react-toastify';
-import { Box, Grid, Card, Typography, Button, Modal, TextField } from '@mui/material';
-import * as React from 'react';
+import { Box, Grid, Card, Typography, Button, Modal, TextField, CircularProgress } from '@mui/material';
+// import * as React from 'react';
 import AccordionTasks from './components/AccordionTasks';
+import useApi from '@/app/components/useApi/UseApi';
 
 export default function TaskPage() {
   const { theme } = useTheme();
-  const [categories, setCategories] = useState([]);
+  const [tasksData, setTasksData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Fetch categories from API
   useEffect(() => {
-    const fetchCategories = async () => {
+    const tasksList = async () => {
       try {
-        const response = await fetch('http://localhost/api/category/list');
-        console.log(response)
-        if (!response.ok) {
+        const response = await useApi.get('/task/list');
+
+        if (response.status !== 200) {
           throw new Error("Erro ao carregar categorias.");
         }
-        const data = await response.json();
-        setCategories(data.categories.length !== 0 ? data.categories : []);
+        const data = await response.data.category;
+        console.log(data)
+        setTasksData(data.length !== 0 ? data : []);
+        setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         throw error
       }
     };
 
-    fetchCategories();
+    tasksList();
   }, []);
-
+  
   // Handle add new category
   const handleAddCategory = async () => {
-    if (newCategory.trim()) {
-      setIsLoading(true);
-      try {
-        const response = await fetch('http://localhost/api/category', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ name: newCategory }),
-        });
+    // if (newCategory.trim()) {
+    //   setIsLoading(true);
+    //   try {
+    //     const response = await fetch('http://localhost/api/category', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       body: JSON.stringify({ name: newCategory }),
+    //     });
 
-        if (!response.ok) {
-          throw new Error("Erro ao criar a categoria.");
-        }
+    //     if (!response.ok) {
+    //       throw new Error("Erro ao criar a categoria.");
+    //     }
 
-        const createdCategory = await response.json();
-        //@ts-ignore
-        setCategories((prev) => [...prev, createdCategory.category]);
-        setNewCategory("");
-        setIsModalOpen(false);
-        toast.success("Categoria criada com sucesso!");
-      } catch (error) {
-        throw error;
-      } finally {
-        setIsLoading(false);
-      }
-    }
+    //     const createdCategory = await response.json();
+    //     //@ts-ignore
+    //     setCategories((prev) => [...prev, createdCategory.category]);
+    //     setNewCategory("");
+    //     setIsModalOpen(false);
+    //     toast.success("Categoria criada com sucesso!");
+    //   } catch (error) {
+    //     throw error;
+    //   } finally {
+    //     setIsLoading(false);
+    //   }
+    // }
   };
 
-  // Columns for DataGrid
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 150 },
-    { field: 'name', headerName: 'Nome', flex: 1 },
-    { field: 'criadoEm', headerName: 'Criado em', flex: 1}
-  ];
 
   return (
     <>
@@ -99,7 +97,7 @@ export default function TaskPage() {
                     }}
                   >
                     <Typography variant="h5" component="h1">
-                      Categorias
+                      Tarefas
                     </Typography>
                     <Button
                       variant="contained"
@@ -109,7 +107,7 @@ export default function TaskPage() {
                         backgroundColor: theme === 'dark' ? '#5c6bc0' : '#1a237e'
                       }}
                     >
-                      Nova Categoria
+                      Nova Tarefa
                     </Button>
                   </Box>
                   {error && (
@@ -117,7 +115,14 @@ export default function TaskPage() {
                       {error}
                     </Typography>
                   )}
-                  <AccordionTasks />
+                  {isLoading && (
+                    <div className="flex items-center justify-center min-h-screen">
+                      <CircularProgress /> {/* Loader enquanto os dados carregam */}
+                    </div>
+                  )}
+                  {!isLoading && (
+                    <AccordionTasks categories={tasksData} />
+                  )}
                 </Card>
               </Grid>
             </Grid>

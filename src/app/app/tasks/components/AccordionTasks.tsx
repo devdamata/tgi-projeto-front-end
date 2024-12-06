@@ -5,8 +5,8 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TaskCard from './TaskCard';
 
-export default function AccordionTasks() {
-  
+const AccordionTasks = ({categories }: {categories: any[]}) => {
+
   const handleDelete = () => {
     alert("Tarefa excluída!");
   };
@@ -14,40 +14,38 @@ export default function AccordionTasks() {
   const handleEdit = () => {
     alert("Editar tarefa!");
   };
-
+  console.log('no accordion: ', categories)
   return (
     <div>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1-content"
-          id="panel1-header"
-        >
-          Accordion 1
-        </AccordionSummary>
-        <AccordionDetails>
-          <TaskCard
-            title="Tarefa 1"
-            description="Desenvolver o Wireframe"
-            date="25/10/2024"
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-          />
-        </AccordionDetails>
-      </Accordion>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          Accordion 2
-        </AccordionSummary>
-        <AccordionDetails>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          malesuada lacus ex, sit amet blandit leo lobortis eget.
-        </AccordionDetails>
-      </Accordion>
+      {categories.map((category, index) => (
+        <Accordion key={index}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls={`panel${index}-content`}
+            id={`panel${index}-header`}
+          >
+            {category.nameCategory}
+          </AccordionSummary>
+          <AccordionDetails>
+            {category.task.length > 0 ? (
+              category.task.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  title={task.title}
+                  description={task.description}
+                  date={task.due_date}
+                  onDelete={() => handleDelete(task.id)}
+                  onEdit={() => handleEdit(task.id)}
+                />
+              ))
+            ) : (
+              <p>Não há tarefas para esta categoria.</p>
+            )}
+          </AccordionDetails>
+        </Accordion>
+      ))}
     </div>
   );
 }
+
+export default AccordionTasks;
