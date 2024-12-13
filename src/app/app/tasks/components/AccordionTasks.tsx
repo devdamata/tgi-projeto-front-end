@@ -7,11 +7,11 @@ import TaskCard from './TaskCard';
 
 const AccordionTasks = ({categories }: {categories: any[]}) => {
 
-  const handleDelete = () => {
+  const handleDelete = (id: any) => {
     alert("Tarefa excluída!");
   };
 
-  const handleEdit = () => {
+  const handleEdit = (id: any) => {
     alert("Editar tarefa!");
   };
   console.log('no accordion: ', categories)
@@ -28,7 +28,7 @@ const AccordionTasks = ({categories }: {categories: any[]}) => {
           </AccordionSummary>
           <AccordionDetails>
             {category.task.length > 0 ? (
-              category.task.map((task) => (
+              category.task.map((task: any) => (
                 <TaskCard
                   key={task.id}
                   title={task.title}
