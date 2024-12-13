@@ -1,9 +1,7 @@
 'use client';
 import Image from "next/image";
-import { useUser } from "@/app/UserContext";
 
 export default function Header() {
-  const { user } = useUser();
 
   return (
     <header className="bg-white dark:bg-gray-800 p-4 shadow-sm">
@@ -12,7 +10,7 @@ export default function Header() {
           <div className="w-full max-w-lg">
             <div className="flex items-center space-x-4">
               <Image 
-                src="/avatar/avatar.png" 
+                src="/avatar/programmer.png"
                 alt="Profile" 
                 width={40} 
                 height={40} 
@@ -20,10 +18,10 @@ export default function Header() {
               />
               <div>
                 <h3 className="font-medium text-gray-900 dark:text-gray-100">
-                  {user?.name || "Nome do Usuário"}
+                  {"Nome do Usuário"}
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {user?.email || "Email do Usuário"}
+                  {"Email do Usuário"}
                 </p>
               </div>
             </div>

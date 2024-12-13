@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+
 const Login = () => {
   const router = useRouter();
 
@@ -13,15 +14,13 @@ const Login = () => {
     try {
       const response = await axios.post(
         'http://localhost/api/login',
-        { email, password } // `withCredentials` removido
+        { email, password },
+        {withCredentials: true}
       );
-      
-      if (response.status === 200) {
-        // Armazena o token no localStorage
-        const { token } = response.data;
-        localStorage.setItem('token', token);
 
-        // Redireciona e exibe a mensagem de sucesso
+      if (response.status === 200) {
+        
+        localStorage.setItem('token', response.data.token);
         router.push('/app/dashboard');
         toast.success('Login efetuado com sucesso!');
       } else {

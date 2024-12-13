@@ -7,7 +7,6 @@ import GraphicPie from "@/app/components/dashboard/GraphicPie";
 import SideBar from './components/sideBar';
 import Header from './components/header';
 import Calendar from './components/calendar';
-import withAuth from '@/app/withAuth/page';
 
 // Importação dinâmica do Recharts
 const LineChart = dynamic(
