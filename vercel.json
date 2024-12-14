@@ -19,5 +19,10 @@
         }
       ]
     }
+  ],
+  "cookies": [
+        {
+          "SameSite": "none"
+        }
   ]
 }
