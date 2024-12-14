@@ -109,7 +109,7 @@ const GraphicPie: React.FC = () => {
     // Função para buscar os dados do backend
     const fetchData = async () => {
         try {
-            const response = await axios.get('/api/tarefas-categorias'); // Ajuste para sua rota de backend
+            const response = await axios.get('/count/tasks/for/category'); // Ajuste para sua rota de backend
             const data = response.data; // Supondo que a resposta seja um array de objetos { name, value }
 
             setChartData(data); // Atualiza os dados do gráfico
