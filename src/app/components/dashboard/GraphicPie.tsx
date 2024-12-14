@@ -1,12 +1,14 @@
 // 'use client';
 
-// import React, { useEffect, useRef } from 'react';
+// import React, { useEffect, useRef, useState } from 'react';
 // import * as echarts from 'echarts';
 // import type { EChartsOption } from 'echarts';
 
 // const GraphicPie: React.FC = () => {
 //     const chartRef = useRef<HTMLDivElement>(null);
 //     const chartInstance = useRef<echarts.ECharts | null>(null);
+
+//     const [chartData, setChartData] = useState<{ name: string, value: number }[]>([]);
 
 //     const monthNames = [
 //         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -15,6 +17,18 @@
       
 //       const currentDate = new Date();
 //       const currentMonthName = monthNames[currentDate.getMonth()];
+
+//       const fetchData = async () => {
+//             try {
+//                 const response = await use.get('/count/tasks/for/category'); // Ajuste para sua rota de backend
+//                 const data = response.data; // Supondo que a resposta seja um array de objetos { name, value }
+    
+//                 setChartData(data); // Atualiza os dados do gráfico
+//                 setIsDataLoaded(true); // Marca os dados como carregados
+//             } catch (error) {
+//                 console.error('Erro ao buscar dados:', error);
+//             }
+//         };
 
 //     useEffect(() => {
 //         // Não inicializar se o elemento DOM não existir
@@ -41,13 +55,14 @@
 //                     name: 'Quantidade de tarefas por categoria',
 //                     type: 'pie',
 //                     radius: '50%',
-//                     data: [
-//                         { value: 1048, name: 'Trabalho' },
-//                         { value: 735, name: 'Estudo Lógica' },
-//                         { value: 580, name: 'Lazer' },
-//                         { value: 484, name: 'Tarefas Domestícas' },
-//                         { value: 300, name: 'Inglês' }
-//                     ],
+//                     data: 
+//                     // data: [
+//                     //     { value: 1048, name: 'Trabalho' },
+//                     //     { value: 735, name: 'Estudo Lógica' },
+//                     //     { value: 580, name: 'Lazer' },
+//                     //     { value: 484, name: 'Tarefas Domestícas' },
+//                     //     { value: 300, name: 'Inglês' }
+//                     // ],
 //                     emphasis: {
 //                         itemStyle: {
 //                             shadowBlur: 10,
@@ -90,6 +105,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
 import type { EChartsOption } from 'echarts';
 import axios from 'axios'; // Se você preferir usar axios
+import useApi from '../useApi/UseApi';
 
 const GraphicPie: React.FC = () => {
     const chartRef = useRef<HTMLDivElement>(null);
@@ -109,7 +125,7 @@ const GraphicPie: React.FC = () => {
     // Função para buscar os dados do backend
     const fetchData = async () => {
         try {
-            const response = await axios.get('/count/tasks/for/category'); // Ajuste para sua rota de backend
+            const response = await useApi.get('/count/tasks/for/category'); // Ajuste para sua rota de backend
             const data = response.data; // Supondo que a resposta seja um array de objetos { name, value }
 
             setChartData(data); // Atualiza os dados do gráfico
