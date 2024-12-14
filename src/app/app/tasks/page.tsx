@@ -33,7 +33,6 @@ export default function TaskPage() {
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-        setError("Erro ao carregar categorias.");
       }
     };
 
