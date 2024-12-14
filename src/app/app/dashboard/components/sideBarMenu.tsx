@@ -37,6 +37,11 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false, l
 };
 
 export default function SideBarMenu() {
+
+    const handleInformation = () => {
+        alert("Tarefa excluída!");
+    };
+
     return (
         <nav
             className="h-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 flex flex-col justify-between"
@@ -48,7 +53,7 @@ export default function SideBarMenu() {
                 {/* <SidebarLink icon={<Users />} text="Contacts" link="/app/dashboard" />
                 <SidebarLink icon={<MessageSquare />} text="Chat" link="/app/dashboard" />
                 <SidebarLink icon={<BarChart2 />} text="Deals" link="/app/dashboard" /> */}
-                <SidebarLink icon={<Settings />} text="Configurações" link="/app/dashboard" />
+                <SidebarLink icon={<Settings />} text="Configurações" link="#" onClick={handleInformation} />
             </div>
             <div className="p-4">
                 <DarkModeToggle />
