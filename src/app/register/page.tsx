@@ -15,7 +15,7 @@ const Register = () => {
 
         try {
             const response = await axios.post(
-                'https://damatatechnology.com.br/api/register',
+                'http://localhost/api/register',
                 { name, email, password, password_confirmation },
                 {withCredentials: true}
             );

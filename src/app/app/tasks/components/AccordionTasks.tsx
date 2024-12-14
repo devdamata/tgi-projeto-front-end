@@ -14,7 +14,7 @@ const AccordionTasks = ({categories }: {categories: any[]}) => {
   const handleEdit = (id: any) => {
     alert("Editar tarefa!");
   };
-  console.log('no accordion: ', categories)
+  
   return (
     <div>
       {categories.map((category, index) => (

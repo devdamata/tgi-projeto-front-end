@@ -13,7 +13,7 @@ const Login = () => {
   const handleLogin = async ({ email, password }: { email: string; password: string }) => {
     try {
       const response = await axios.post(
-        'https://damatatechnology.com.br/api/login',
+        'http://localhost/api/login',
         { email, password },
         {withCredentials: true}
       );

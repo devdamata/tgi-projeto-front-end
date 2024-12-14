@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const useApi = axios.create({
-    // baseURL: "http://localhost/api",
-    baseURL: "https://damatatechnology.com.br/api",
+    baseURL: "http://localhost/api",
+    // baseURL: "https://damatatechnology.com.br/api",
 });
 
 // Adicionar interceptor para enviar o token no cabeçalho

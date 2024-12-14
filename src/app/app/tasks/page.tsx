@@ -5,7 +5,8 @@ import { useTheme } from "@/app/hooks/useTheme";
 import Header from "../dashboard/components/header";
 import SideBar from "../dashboard/components/sideBar";
 import { toast } from 'react-toastify';
-import { Box, Grid, Card, Typography, Button, Modal, TextField, CircularProgress, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { Box, Grid, Card, Typography, Button, Modal, TextField, CircularProgress, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+// import * as React from 'react';
 import AccordionTasks from './components/AccordionTasks';
 import useApi from '@/app/components/useApi/UseApi';
 
@@ -14,13 +15,36 @@ export default function TaskPage() {
   const [tasksData, setTasksData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newDueDate, setNewDueDate] = useState("");
+  const [newPriority, setNewPriority] = useState("");
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [categoryList, setCategoryList] = useState([]);
+
   // Fetch categories from API
   useEffect(() => {
+    const tasksList = async () => {
+      try {
+        const response = await useApi.get('/task/list');
+
+        if (response.status !== 200) {
+          throw new Error("Erro ao carregar categorias.");
+        }
+        const data = await response.data.category;
+
+        setTasksData(data.length !== 0 ? data : []);
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        throw error
+      }
+    };
+
+    tasksList();
+
     const categoryList = async () => {
       try {
         const response = await useApi.get('/category/list');
@@ -28,29 +52,33 @@ export default function TaskPage() {
         if (response.status !== 200) {
           throw new Error("Erro ao carregar categorias.");
         }
-        const data = response.data.categories; // Use 'categories' in the response
-        setTasksData(data.length !== 0 ? data : []);
+        const data = await response.data.categories;
+        
+        setCategoryList(data.length !== 0 ? data : []);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
+        throw error
       }
     };
 
     categoryList();
   }, []);
-
-  // Handle add new task
+  
+  // Handle add new category
   const handleAddTask = async () => {
     if (newTaskTitle.trim() && newTaskDescription.trim() && selectedCategory) {
       setIsLoading(true);
       try {
-        const response = await useApi.post('/task/create', {
+        const response = await useApi.post('/task', {
           title: newTaskTitle,
           description: newTaskDescription,
           category_id: selectedCategory,
+          due_date: newDueDate,
+          priority: newPriority
         });
 
-        if (response.status !== 200) {
+        if (response.status !== 201) {
           throw new Error("Erro ao criar a tarefa.");
         }
 
@@ -69,6 +97,7 @@ export default function TaskPage() {
       toast.error("Por favor, preencha todos os campos.");
     }
   };
+
 
   return (
     <>
@@ -166,6 +195,16 @@ export default function TaskPage() {
                 multiline
                 rows={4}
               />
+              <TextField
+                fullWidth
+                label="Data de Vencimento"
+                type="date"
+                value={newDueDate}
+                onChange={(e) => setNewDueDate(e.target.value)}
+                variant="outlined"
+                margin="dense"
+                InputLabelProps={{ shrink: true }}
+              />
               <FormControl fullWidth margin="dense">
                 <InputLabel id="category-select-label">Categoria</InputLabel>
                 <Select
@@ -174,11 +213,24 @@ export default function TaskPage() {
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   label="Categoria"
                 >
-                  {tasksData.map((category: any) => (
+                  {categoryList.map((category: any) => (
                     <MenuItem key={category.id} value={category.id}>
                       {category.name}
                     </MenuItem>
                   ))}
+                </Select>
+              </FormControl>
+              <FormControl fullWidth margin="dense">
+                <InputLabel id="priority-select-label">Prioridade</InputLabel>
+                <Select
+                  labelId="priority-select-label"
+                  value={newPriority}
+                  onChange={(e) => setNewPriority(e.target.value)}
+                  label="Prioridade"
+                >
+                  <MenuItem value="1">Alta</MenuItem>
+                  <MenuItem value="2">Média</MenuItem>
+                  <MenuItem value="3">Baixa</MenuItem>
                 </Select>
               </FormControl>
               <Box display="flex" justifyContent="flex-end" mt={2}>
@@ -204,5 +256,6 @@ export default function TaskPage() {
         </div>
       </div>
     </>
+    
   );
 }
