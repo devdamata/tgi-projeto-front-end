@@ -10,9 +10,10 @@ interface SidebarLinkProps {
     text: string;
     active?: boolean;
     link: string;
+    onClick?: () => void;
 }
 
-const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false, link }) => {
+const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false, link, onClick }) => {
     const { theme } = useTheme(); // Obtém o tema atual do hook
 
     return (
