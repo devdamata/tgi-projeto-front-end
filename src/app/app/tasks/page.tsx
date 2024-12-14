@@ -5,8 +5,7 @@ import { useTheme } from "@/app/hooks/useTheme";
 import Header from "../dashboard/components/header";
 import SideBar from "../dashboard/components/sideBar";
 import { toast } from 'react-toastify';
-import { Box, Grid, Card, Typography, Button, Modal, TextField, CircularProgress } from '@mui/material';
-// import * as React from 'react';
+import { Box, Grid, Card, Typography, Button, Modal, TextField, CircularProgress, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import AccordionTasks from './components/AccordionTasks';
 import useApi from '@/app/components/useApi/UseApi';
 
@@ -14,63 +13,63 @@ export default function TaskPage() {
   const { theme } = useTheme();
   const [tasksData, setTasksData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newCategory, setNewCategory] = useState("");
+  const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskDescription, setNewTaskDescription] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Fetch categories from API
   useEffect(() => {
-    const tasksList = async () => {
+    const categoryList = async () => {
       try {
-        const response = await useApi.get('/task/list');
+        const response = await useApi.get('/category/list');
 
         if (response.status !== 200) {
           throw new Error("Erro ao carregar categorias.");
         }
-        const data = await response.data.category;
-        console.log(data)
+        const data = response.data.categories; // Use 'categories' in the response
         setTasksData(data.length !== 0 ? data : []);
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-        throw error
+        setError("Erro ao carregar categorias.");
       }
     };
 
-    tasksList();
+    categoryList();
   }, []);
-  
-  // Handle add new category
-  const handleAddCategory = async () => {
-    // if (newCategory.trim()) {
-    //   setIsLoading(true);
-    //   try {
-    //     const response = await fetch('http://localhost/api/category', {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       body: JSON.stringify({ name: newCategory }),
-    //     });
 
-    //     if (!response.ok) {
-    //       throw new Error("Erro ao criar a categoria.");
-    //     }
+  // Handle add new task
+  const handleAddTask = async () => {
+    if (newTaskTitle.trim() && newTaskDescription.trim() && selectedCategory) {
+      setIsLoading(true);
+      try {
+        const response = await useApi.post('/task/create', {
+          title: newTaskTitle,
+          description: newTaskDescription,
+          category_id: selectedCategory,
+        });
 
-    //     const createdCategory = await response.json();
-    //     //@ts-ignore
-    //     setCategories((prev) => [...prev, createdCategory.category]);
-    //     setNewCategory("");
-    //     setIsModalOpen(false);
-    //     toast.success("Categoria criada com sucesso!");
-    //   } catch (error) {
-    //     throw error;
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // }
+        if (response.status !== 200) {
+          throw new Error("Erro ao criar a tarefa.");
+        }
+
+        toast.success("Tarefa criada com sucesso!");
+        setIsModalOpen(false);
+        // Reset form fields
+        setNewTaskTitle("");
+        setNewTaskDescription("");
+        setSelectedCategory("");
+      } catch (error) {
+        toast.error("Erro ao criar a tarefa.");
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      toast.error("Por favor, preencha todos os campos.");
+    }
   };
-
 
   return (
     <>
@@ -148,16 +147,41 @@ export default function TaskPage() {
               }}
             >
               <Typography id="modal-title" variant="h6" mb={2} sx={{color: theme === 'dark' ? '#fff' : '#333'}}>
-                Nova Categoria
+                Nova Tarefa
               </Typography>
               <TextField
                 fullWidth
-                label="Nome da categoria"
-                value={newCategory}
-                onChange={(e) => setNewCategory(e.target.value)}
+                label="Título da Tarefa"
+                value={newTaskTitle}
+                onChange={(e) => setNewTaskTitle(e.target.value)}
                 variant="outlined"
                 margin="dense"
               />
+              <TextField
+                fullWidth
+                label="Descrição"
+                value={newTaskDescription}
+                onChange={(e) => setNewTaskDescription(e.target.value)}
+                variant="outlined"
+                margin="dense"
+                multiline
+                rows={4}
+              />
+              <FormControl fullWidth margin="dense">
+                <InputLabel id="category-select-label">Categoria</InputLabel>
+                <Select
+                  labelId="category-select-label"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  label="Categoria"
+                >
+                  {tasksData.map((category) => (
+                    <MenuItem key={category.id} value={category.id}>
+                      {category.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <Box display="flex" justifyContent="flex-end" mt={2}>
                 <Button
                   onClick={() => setIsModalOpen(false)}
@@ -168,7 +192,7 @@ export default function TaskPage() {
                   Cancelar
                 </Button>
                 <Button
-                  onClick={handleAddCategory}
+                  onClick={handleAddTask}
                   variant="contained"
                   color="primary"
                   disabled={isLoading}
@@ -181,6 +205,5 @@ export default function TaskPage() {
         </div>
       </div>
     </>
-    
   );
 }
