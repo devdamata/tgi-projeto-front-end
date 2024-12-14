@@ -90,13 +90,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
 import type { EChartsOption } from 'echarts';
 import axios from 'axios'; // Se você preferir usar axios
-import useApi from '../useApi/UseApi';
 
 const GraphicPie: React.FC = () => {
     const chartRef = useRef<HTMLDivElement>(null);
     const chartInstance = useRef<echarts.ECharts | null>(null);
 
-    const [chartData, setChartData] = useState<{ name: string, task_count: number }[]>([]);
+    const [chartData, setChartData] = useState<{ name: string, value: number }[]>([]);
+    const [isDataLoaded, setIsDataLoaded] = useState(false); // Adiciona estado para controlar o carregamento de dados
 
     const monthNames = [
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -106,19 +106,21 @@ const GraphicPie: React.FC = () => {
     const currentDate = new Date();
     const currentMonthName = monthNames[currentDate.getMonth()];
 
+    // Função para buscar os dados do backend
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('/api/tarefas-categorias'); // Ajuste para sua rota de backend
+            const data = response.data; // Supondo que a resposta seja um array de objetos { name, value }
+
+            setChartData(data); // Atualiza os dados do gráfico
+            setIsDataLoaded(true); // Marca os dados como carregados
+        } catch (error) {
+            console.error('Erro ao buscar dados:', error);
+        }
+    };
+
     useEffect(() => {
-        // Função para buscar os dados do backend
-        const fetchData = async () => {
-            try {
-                const response = await useApi.get('/count/tasks/for/category'); // Ajuste para sua rota de backend
-                const data = response.data; // Supondo que a resposta seja um array de objetos { name, value }
-
-                setChartData(data); // Atualiza os dados do gráfico
-            } catch (error) {
-                console.error('Erro ao buscar dados:', error);
-            }
-        };
-
+        // Chama a função de carregar os dados apenas uma vez quando o componente for montado
         fetchData();
 
         // Não inicializar se o elemento DOM não existir
@@ -126,6 +128,24 @@ const GraphicPie: React.FC = () => {
 
         // Inicializar o gráfico
         chartInstance.current = echarts.init(chartRef.current);
+
+        // Função para redimensionar o gráfico
+        const handleResize = () => {
+            chartInstance.current?.resize();
+        };
+
+        // Adicionar listener de redimensionamento
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            chartInstance.current?.dispose();
+        };
+    }, []); // Efeito de carregamento dos dados que será executado apenas uma vez
+
+    useEffect(() => {
+        if (!isDataLoaded) return; // Evita renderização do gráfico antes de carregar os dados
 
         // Função para atualizar o gráfico com os dados
         const updateChart = () => {
@@ -165,23 +185,10 @@ const GraphicPie: React.FC = () => {
         };
 
         updateChart(); // Atualiza o gráfico com os dados obtidos
-
-        // Função para redimensionar o gráfico
-        const handleResize = () => {
-            chartInstance.current?.resize();
-        };
-
-        // Adicionar listener de redimensionamento
-        window.addEventListener('resize', handleResize);
-
-        // Cleanup
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            chartInstance.current?.dispose();
-        };
-    }, [chartData, currentMonthName]); // Re-executa o efeito quando `chartData` mudar
+    }, [chartData, currentMonthName, isDataLoaded]); // Só executa quando os dados são carregados
 
     return <div ref={chartRef} style={{ width: '100%', height: '300px' }} />;
 };
 
 export default GraphicPie;
+
