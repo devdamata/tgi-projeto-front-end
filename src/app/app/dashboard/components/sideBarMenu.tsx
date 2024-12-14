@@ -14,7 +14,15 @@ interface SidebarLinkProps {
 }
 
 const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false, link, onClick }) => {
-    const { theme } = useTheme(); // Obtém o tema atual do hook
+    const { theme } = useTheme();
+
+    const handleClick = (e: React.MouseEvent) => {
+        // Se houver uma função onClick, impede a navegação
+        if (onClick) {
+            e.preventDefault();  // Impede a navegação padrão
+            onClick(); // Chama a função onClick, se fornecida
+        }
+    };
 
     return (
         <div
@@ -29,7 +37,7 @@ const SidebarLink: React.FC<SidebarLinkProps> = ({ icon, text, active = false, l
                             : 'text-gray-600 hover:bg-gray-50'
                 }`}
         >
-            <a href={link} className="flex items-center space-x-2 w-full">
+             <a href={link} className="flex items-center space-x-2 w-full" onClick={handleClick}>
                 {icon}
                 <span>{text}</span>
             </a>
