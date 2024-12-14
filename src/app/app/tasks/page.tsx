@@ -174,7 +174,7 @@ export default function TaskPage() {
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   label="Categoria"
                 >
-                  {tasksData.map((category) => (
+                  {tasksData.map((category: any) => (
                     <MenuItem key={category.id} value={category.id}>
                       {category.name}
                     </MenuItem>
