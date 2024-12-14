@@ -160,6 +160,7 @@ const GraphicPie: React.FC = () => {
             };
 
             // Configurar o gráfico
+            //@ts-ignore
             chartInstance.current?.setOption(option);
         };
 
