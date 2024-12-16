@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const useApi = axios.create({
-    baseURL: "http://localhost/api",
+    // baseURL: "http://localhost/api",
+    baseURL: "http://localhost/projeto-tgi-II/public/api",
     // baseURL: "https://damatatechnology.com.br/api",
 });
 

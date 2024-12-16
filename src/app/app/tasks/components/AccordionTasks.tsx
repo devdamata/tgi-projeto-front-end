@@ -27,21 +27,25 @@ const AccordionTasks = ({categories }: {categories: any[]}) => {
             {category.nameCategory}
           </AccordionSummary>
           <AccordionDetails>
-            {category.task.length > 0 ? (
-              category.task.map((task: any) => (
-                <TaskCard
-                  key={task.id}
-                  title={task.title}
-                  description={task.description}
-                  date={task.due_date}
-                  onDelete={() => handleDelete(task.id)}
-                  onEdit={() => handleEdit(task.id)}
-                />
-              ))
-            ) : (
-              <p>Não há tarefas para esta categoria.</p>
-            )}
+            <div className="flex flex-wrap gap-4 p-4">
+              {category.task.length > 0 ? (
+                category.task.map((task: any) => (
+                  <TaskCard
+                    key={task.id}
+                    title={task.title}
+                    description={task.description}
+                    date={task.due_date}
+                    priority={task.priority}
+                    onDelete={() => handleDelete(task.id)}
+                    onEdit={() => handleEdit(task.id)}
+                  />
+                ))
+              ) : (
+                <p>Não há tarefas para esta categoria.</p>
+              )}
+            </div>
           </AccordionDetails>
+
         </Accordion>
       ))}
     </div>

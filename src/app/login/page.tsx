@@ -13,7 +13,8 @@ const Login = () => {
   const handleLogin = async ({ email, password }: { email: string; password: string }) => {
     try {
       const response = await axios.post(
-        'http://localhost/api/login',
+        // 'http://localhost/api/login',
+        'http://localhost/projeto-tgi-II/public/api/login',
         { email, password },
         {withCredentials: true}
       );

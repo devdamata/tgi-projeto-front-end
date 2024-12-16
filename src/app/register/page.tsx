@@ -15,7 +15,8 @@ const Register = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost/api/register',
+                // 'http://localhost/api/register',
+                'http://localhost/projeto-tgi-II/public/api/register',
                 { name, email, password, password_confirmation },
                 {withCredentials: true}
             );
